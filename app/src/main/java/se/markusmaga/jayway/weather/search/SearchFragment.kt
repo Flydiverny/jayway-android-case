@@ -1,13 +1,16 @@
 package se.markusmaga.jayway.weather.search
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import kotlinx.android.synthetic.main.fragment_search.*
 import se.markusmaga.jayway.weather.R
+import se.markusmaga.jayway.weather.utils.Settings
 import se.markusmaga.jayway.weather.activities.MainActivity
-import se.markusmaga.jayway.weather.extensions.toast
+import se.markusmaga.jayway.weather.utils.kotlin.extensions.toast
 import se.markusmaga.jayway.weather.mvp.BaseFragment
 import se.markusmaga.jayway.weather.network.models.SearchResult
 
@@ -18,6 +21,8 @@ import se.markusmaga.jayway.weather.network.models.SearchResult
 class SearchFragment : BaseFragment<SearchContract.Presenter, SearchContract.View>(), SearchContract.View {
 
     private val _adapter: SearchAdapter = SearchAdapter { mPresenter.searchResultClicked(it) }
+
+    private var settings: Settings? = null
 
     override fun showLoading() {
         search_results.visibility = View.GONE
@@ -39,22 +44,34 @@ class SearchFragment : BaseFragment<SearchContract.Presenter, SearchContract.Vie
         search_field.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                mPresenter.search(query)
+                mPresenter.manualSearch(query)
+                hideKeyboard()
                 return true
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-                mPresenter.search(query)
+                mPresenter.autoSearch(query)
                 return true
             }
         })
 
         search_results.layoutManager = LinearLayoutManager(activity)
         search_results.adapter = _adapter
+
+        search_button.setOnClickListener {
+            mPresenter.manualSearch(search_field.query.toString())
+            hideKeyboard()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(activity.currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
     override fun createPresenter(): SearchContract.Presenter {
-        return SearchPresenter()
+        settings = Settings(activity)
+        return SearchPresenter(settings!!)
     }
 
     override fun layoutToInflate(): Int {
@@ -76,6 +93,10 @@ class SearchFragment : BaseFragment<SearchContract.Presenter, SearchContract.Vie
     override fun showNoResults() {
         _adapter.clearSearchResults()
         toast(R.string.search_no_results)
+    }
+
+    override fun showNoQuery() {
+        toast(R.string.no_query)
     }
 
     companion object Factory {

@@ -1,4 +1,4 @@
-package se.markusmaga.jayway.weather.extensions
+package se.markusmaga.jayway.weather.utils.kotlin.extensions
 
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment

@@ -1,6 +1,8 @@
 package se.markusmaga.jayway.weather.details;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -21,10 +23,15 @@ public class DetailsFragment extends BaseFragment<DetailsContract.Presenter, Det
     private static final String CITY_ID = "city_id";
 
     private ProgressBar mLoading;
+    private ForecastAdapter mAdapter;
 
     @Override
     protected void bindView(View view, Bundle savedInstanceState) {
         mLoading = (ProgressBar) view.findViewById(R.id.loading);
+
+        RecyclerView forecasts = (RecyclerView) view.findViewById(R.id.forecasts);
+        forecasts.setLayoutManager(new LinearLayoutManager(getActivity()));
+        forecasts.setAdapter(mAdapter = new ForecastAdapter());
     }
 
     @Override
@@ -53,8 +60,8 @@ public class DetailsFragment extends BaseFragment<DetailsContract.Presenter, Det
     }
 
     @Override
-    public void showForecast(List<CityDayForecast> forecast) {
-        // TODO
+    public void showForecast(List<CityDayForecast> forecasts) {
+        mAdapter.setItems(forecasts);
     }
 
     @Override
