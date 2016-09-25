@@ -1,4 +1,4 @@
-package se.markusmaga.jayway.weather.models;
+package se.markusmaga.jayway.weather.network.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

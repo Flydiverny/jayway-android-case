@@ -1,6 +1,6 @@
 package se.markusmaga.jayway.weather.search
 
-import se.markusmaga.jayway.weather.models.SearchResult
+import se.markusmaga.jayway.weather.network.models.SearchResult
 import se.markusmaga.jayway.weather.mvp.BaseContract
 
 /**
@@ -8,8 +8,7 @@ import se.markusmaga.jayway.weather.mvp.BaseContract
  */
 interface SearchContract {
 
-    interface View : BaseContract.View {
-        fun searchFailedNetworkIssues()
+    interface View : BaseContract.LceView {
         fun searchFailedResponseIssues()
         fun showSearchResults(list: List<SearchResult>)
         fun showNoResults()

@@ -9,6 +9,12 @@ public interface BaseContract {
 
     }
 
+    interface LceView extends View {
+        void showLoading();
+        void hideLoading();
+        void showNetworkError();
+    }
+
     interface Presenter<T extends View> {
         void attachView(T view);
         void detachView();

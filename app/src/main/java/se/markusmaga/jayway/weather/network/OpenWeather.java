@@ -7,12 +7,9 @@ import java.lang.annotation.Retention;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import se.markusmaga.jayway.weather.models.CityForecast;
-import se.markusmaga.jayway.weather.models.SearchResponse;
+import se.markusmaga.jayway.weather.network.models.CityForecast;
+import se.markusmaga.jayway.weather.network.models.SearchResponse;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static android.content.Context.POWER_SERVICE;
-import static android.content.Context.WINDOW_SERVICE;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
@@ -24,15 +21,14 @@ public interface OpenWeather {
                                   @WeatherUnit @Query("units") String units,
                                   @Query("count") int count);
 
-    @GET("forecast/daily")
+    @GET("2.5/forecast/daily")
     Call<CityForecast> searchById(@Query("id") int cityId,
                                   @WeatherUnit @Query("units") String units);
 
     @Retention(SOURCE)
     @StringDef({
-            POWER_SERVICE,
-            WINDOW_SERVICE,
-            LAYOUT_INFLATER_SERVICE
+            METRIC,
+            IMPERIAL
     })
     @interface WeatherUnit {}
     String METRIC = "metric";

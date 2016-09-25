@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import se.markusmaga.jayway.weather.R;
-import se.markusmaga.jayway.weather.models.SearchResult;
+import se.markusmaga.jayway.weather.network.models.SearchResult;
 
 /**
  * Created by Flydiverny on 25/09/16.
@@ -57,13 +57,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
 
-        holder.name.setText(city.getName());
-        holder.temperature.setText(String.format(Locale.getDefault(), "%.1f", city.getMain().getTemp()));
+        holder.name.setText(String.format("%s (%s)", city.getName(), city.getSys().getCountry()));
+        holder.temperature.setText(String.format(Locale.getDefault(), "%.1f\u00B0%s", city.getMain().getTemp(), "C"));
     }
 
     @Override
     public int getItemCount() {
         return mSearchResults.size();
+    }
+
+    public void clearSearchResults() {
+        mSearchResults.clear();
+        notifyItemRangeRemoved(0, mSearchResults.size());
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

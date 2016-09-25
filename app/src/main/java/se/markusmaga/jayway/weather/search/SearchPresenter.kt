@@ -4,8 +4,8 @@ import android.util.Log
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import se.markusmaga.jayway.weather.models.SearchResponse
-import se.markusmaga.jayway.weather.models.SearchResult
+import se.markusmaga.jayway.weather.network.models.SearchResponse
+import se.markusmaga.jayway.weather.network.models.SearchResult
 import se.markusmaga.jayway.weather.network.OpenWeather
 import se.markusmaga.jayway.weather.network.RestMachine
 
@@ -15,12 +15,7 @@ import se.markusmaga.jayway.weather.network.RestMachine
 class SearchPresenter : SearchContract.Presenter {
 
     private val TAG: String = "Search"
-
-    override fun searchResultClicked(it: SearchResult) {
-        _view?.navigateToDetails(it.id)
-    }
-
-    var _view: SearchContract.View? = null
+    private var _view: SearchContract.View? = null
 
     override fun attachView(view: SearchContract.View?) {
         _view = view
@@ -30,17 +25,34 @@ class SearchPresenter : SearchContract.Presenter {
         _view = null
     }
 
+    override fun searchResultClicked(it: SearchResult) {
+        _view?.navigateToDetails(it.id)
+    }
+
+    private var _call: Call<SearchResponse>? = null
+
     override fun search(query: String?) {
         if (query is String && query.length > 3) {
             Log.v(TAG, "Search string: " + query)
 
-            RestMachine.getInstance().findCity(query, OpenWeather.METRIC, 100)
-                    .enqueue(object : Callback<SearchResponse> {
-                                override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                                    _view?.searchFailedNetworkIssues()
-                                }
+            // If we have a call ongoing make sure to cancel it
+            _call?.cancel()
 
-                                override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+            _view?.showLoading()
+
+            _call = RestMachine.getInstance().findCity(query, OpenWeather.METRIC, 100)
+            _call?.enqueue(object : Callback<SearchResponse> {
+                            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                                if (!call.isCanceled) {
+                                    _view?.showNetworkError()
+                                    _view?.hideLoading()
+                                } else {
+                                    Log.v(TAG, "Call was already canceled: " + query)
+                                }
+                            }
+
+                            override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+                                if (!call.isCanceled) {
                                     if (response.isSuccessful) {
                                         if (response.body().list.size > 0) {
                                             _view?.showSearchResults(response.body().list)
@@ -50,9 +62,13 @@ class SearchPresenter : SearchContract.Presenter {
                                     } else {
                                         _view?.searchFailedResponseIssues()
                                     }
+
+                                    _view?.hideLoading()
+                                } else {
+                                    Log.v(TAG, "Call was already canceled: " + query)
                                 }
-                            })
+                            }
+                        })
         }
     }
-
 }

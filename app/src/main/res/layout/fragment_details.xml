@@ -5,20 +5,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <SearchView
-        android:id="@+id/search_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:iconifiedByDefault="false"
-        android:queryHint="@string/search_query"
-        />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <ListView
             android:id="@+id/search_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

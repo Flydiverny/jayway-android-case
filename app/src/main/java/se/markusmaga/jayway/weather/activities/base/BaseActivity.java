@@ -1,4 +1,4 @@
-package se.markusmaga.jayway.weather.activities;
+package se.markusmaga.jayway.weather.activities.base;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +13,9 @@ public class BaseActivity extends AppCompatActivity {
     protected void setDefaultFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, fragment)
-                .commit();
+                .replace(R.id.fragment_container, fragment)
+                .disallowAddToBackStack()
+                .commitNow();
     }
 
     public void showFragment(Fragment frag) {
@@ -24,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
     public void showFragment(Fragment frag, String tag) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content, frag)
+                .replace(R.id.fragment_container, frag)
                 .addToBackStack(tag)
                 .commit();
     }
