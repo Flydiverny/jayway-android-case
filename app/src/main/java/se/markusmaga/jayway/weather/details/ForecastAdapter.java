@@ -19,11 +19,11 @@ import se.markusmaga.jayway.weather.network.models.CityDayForecast;
 /**
  * Created by Flydiverny on 25/09/16.s
  */
-public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
+/* package */ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
 
     private List<CityDayForecast> mForecasts = new ArrayList<>();
 
-    public void setItems(List<CityDayForecast> items) {
+    /* package */ void setItems(List<CityDayForecast> items) {
         if (items == null) {
             mForecasts = new ArrayList<>();
         } else {
@@ -46,10 +46,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         final CityDayForecast forecast = mForecasts.get(position);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
-        String day = sdf.format(new Date(forecast.getDt()*1000));
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE (dd/MM)", Locale.getDefault());
+        String day = sdf.format(new Date(forecast.getDt()*1000L));
 
-        holder.day.setText(String.format("%s (%s)", day, "WOHO"));
+        holder.day.setText(day);
         holder.temperature.setText(String.format(Locale.getDefault(), "%.1f\u00B0%s", forecast.getTemp().getDay(), "C"));
     }
 
@@ -58,7 +58,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         return mForecasts.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    /* package */ class ViewHolder extends RecyclerView.ViewHolder {
         TextView day;
         TextView temperature;
         ImageView image;

@@ -5,14 +5,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
 import se.markusmaga.jayway.weather.R;
+import se.markusmaga.jayway.weather.mvp.BaseFragment;
 import se.markusmaga.jayway.weather.network.models.City;
 import se.markusmaga.jayway.weather.network.models.CityDayForecast;
-import se.markusmaga.jayway.weather.mvp.BaseFragment;
 
 /**
  * Created by Flydiverny on 25/09/16.
@@ -24,10 +25,13 @@ public class DetailsFragment extends BaseFragment<DetailsContract.Presenter, Det
 
     private ProgressBar mLoading;
     private ForecastAdapter mAdapter;
+    private TextView mCity, mRight;
 
     @Override
     protected void bindView(View view, Bundle savedInstanceState) {
         mLoading = (ProgressBar) view.findViewById(R.id.loading);
+        mCity = (TextView) view.findViewById(R.id.city);
+        mRight = (TextView) view.findViewById(R.id.right);
 
         RecyclerView forecasts = (RecyclerView) view.findViewById(R.id.forecasts);
         forecasts.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -66,7 +70,8 @@ public class DetailsFragment extends BaseFragment<DetailsContract.Presenter, Det
 
     @Override
     public void showCityInfo(City city) {
-        // TODO
+        mCity.setText(city.getName());
+        mRight.setText(city.getCountry());
     }
 
     @Override

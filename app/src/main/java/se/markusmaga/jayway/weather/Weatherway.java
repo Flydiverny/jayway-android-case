@@ -6,7 +6,7 @@ import android.app.Application;
  * Created by Flydiverny on 26/09/16.
  */
 
-public class Weatherway extends Application {
+public final class Weatherway extends Application {
 
     @Override
     public void onCreate() {

@@ -10,7 +10,7 @@ import se.markusmaga.jayway.weather.network.RestMachine;
 /**
  * Created by Flydiverny on 25/09/16.
  */
-public class DetailsPresenter implements DetailsContract.Presenter {
+/* package */ class DetailsPresenter implements DetailsContract.Presenter {
 
     private DetailsContract.View mView;
 

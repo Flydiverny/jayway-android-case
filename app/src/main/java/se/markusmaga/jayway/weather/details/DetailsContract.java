@@ -9,7 +9,6 @@ import se.markusmaga.jayway.weather.mvp.BaseContract;
 /**
  * Created by Flydiverny on 25/09/16.
  */
-
 public interface DetailsContract {
 
     interface View extends BaseContract.LceView {

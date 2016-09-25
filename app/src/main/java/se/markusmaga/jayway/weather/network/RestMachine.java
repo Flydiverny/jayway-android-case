@@ -15,12 +15,17 @@ import se.markusmaga.jayway.weather.Constants;
  * Created by Flydiverny on 24/09/16.
  */
 
-public class RestMachine {
+public final class RestMachine {
 
     private static OpenWeather INSTANCE;
 
+    private RestMachine() {
+        // hide constructor plz
+    }
+
     public static OpenWeather getInstance() {
         if (INSTANCE == null) {
+            // Not threadsafe etc, yes yes I know. enum method maybe? =D
             INSTANCE = new RestMachine().getRetrofit().create(OpenWeather.class);
         }
 
