@@ -2,6 +2,8 @@
 
 MVP Style, packaged by feature/view, testing out some Kotlin
 
+APK: openweather-release.apk
+
 - Intentionally mixing Kotlin & Java to try this out
     - Not sure about kotlin conventions in regard to naming prefixes and the likes (hungarian notation etc)
 - Left out the design part :)
